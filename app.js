@@ -1,3 +1,5 @@
+"use strict";
+
 /** BizTime express application. */
 
 const express = require("express");
@@ -5,7 +7,16 @@ const { NotFoundError } = require("./expressError");
 
 const app = express();
 
+const companiesRoutes = require('./routes/companies');
+
+// START
+// MIDDLEWARE
+
 app.use(express.json());
+
+// ROUTERS
+
+app.use("/companies", companiesRoutes);
 
 
 /** 404 handler: matches unmatched routes; raises NotFoundError. */
