@@ -84,7 +84,7 @@ router.post('/', async function (req, res, next) {
 
 router.put("/:code", async function(req,res,next){
   //debugger;
-  if (req.body === undefined) throw new BadRequestError();
+  if (req.body === undefined) throw new BadRequestError(); //TODO: specific error 
 
   const { name, description } = req.body;
   const code = req.params.code;
