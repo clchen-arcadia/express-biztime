@@ -10,6 +10,7 @@ const app = express();
 const companiesRoutes = require("./routes/companies");
 
 // START
+
 // MIDDLEWARE
 
 app.use(express.json());
@@ -31,7 +32,6 @@ app.use(function (err, req, res, next) {
   if (process.env.NODE_ENV !== "test") console.error(status, err.stack);
   return res.status(status).json({ error: { message, status } });
 });
-
 
 
 module.exports = app;

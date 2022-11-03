@@ -3,9 +3,10 @@
 const express = require('express');
 const router = new express.Router();
 
+const { BadRequestError, NotFoundError } = require("../expressError");
+
 const db = require('../db');
 
-const { BadRequestError, NotFoundError } = require("../expressError");
 
 router.get('/', async function (req, res, next) {
 
@@ -28,10 +29,11 @@ router.get('/:code', async function (req, res, next) {
       WHERE code = $1`, [code]);
 
   const company = result.rows[0];
+
   if(company === undefined) {
-    console.log("Here in error message");
-    throw new NotFoundError(`Not found: ${code}`);
+    throw new NotFoundError();
   }
+
   return res.json({company});
 });
 
