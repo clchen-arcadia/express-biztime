@@ -7,7 +7,7 @@ const { NotFoundError } = require("./expressError");
 
 const app = express();
 
-const companiesRoutes = require('./routes/companies');
+const companiesRoutes = require("./routes/companies");
 
 // START
 // MIDDLEWARE
