@@ -28,9 +28,31 @@ router.get('/:code', async function (req, res, next) {
       WHERE code = $1`, [code]);
 
   const company = result.rows[0];
-  debugger;
-  res.json({company});
+  if(company === undefined) {
+    console.log("Here in error message");
+    throw new NotFoundError(`Not found: ${code}`);
+  }
+  return res.json({company});
 });
 
+/** Make a POST request. Adds a company to the database */
+router.post('/', async function (req, res, next) {
+  const { code, name, description } = req.body;
+
+  if(!code || !name || !description) {
+    throw new BadRequestError(
+    "Invalid Input: Please input code, name, and description"
+  )};
+
+  const result = await db.query(
+    `INSERT INTO companies (code, name, description)
+      VALUES ($1,$2,$3)
+      RETURNING code, name, description`,
+      [code,name,description]
+  );
+  const company = result.rows[0];
+
+  return res.status(201).json({ company });
+});
 
 module.exports = router;
