@@ -8,7 +8,7 @@ const { BadRequestError, NotFoundError } = require("../expressError");
 const db = require('../db');
 
 /** Make GET request
- * Returns list of invoices. fromthe database as an array of objects
+ * Returns list of invoices. from the database as an array of objects
  */
 router.get('/', async function (req, res, next) {
 
@@ -20,3 +20,7 @@ router.get('/', async function (req, res, next) {
 
   return res.json({ invoices });
 });
+
+
+
+module.exports = router;
