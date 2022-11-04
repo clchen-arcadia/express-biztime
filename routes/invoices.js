@@ -40,7 +40,7 @@ router.get('/:id', async function (req, res, next) {
 
   const {id, amt, paid, add_date, paid_date,
     code, name, description} = compositeResult;
-  // TODO: Another/better way to do this?
+  // TODO: Another/better way to do this? can write two queries
 
   const company = {code, name, description};
   const invoice = {id, amt, paid, add_date, paid_date, company};
@@ -71,7 +71,7 @@ router.post('/', async function (req, res, next) {
   }
   catch (IntegrityError) {
     console.log(IntegrityError.message);
-    throw new BadRequestError('Company code does not exist in the database');
+    throw new BadRequestError('Company code does not exist in the database'); //Error message
   }
   const invoice = result.rows[0];
 
@@ -122,7 +122,7 @@ router.delete('/:id', async function(req,res,next){
       WHERE id = $1
       RETURNING id, comp_code`, [id]
   );
-
+//Can give result.rows a name
   if(result.rows.length === 0) throw new NotFoundError();
 
   return res.json({status:"deleted"});
