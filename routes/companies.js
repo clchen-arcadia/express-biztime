@@ -29,23 +29,40 @@ router.get('/', async function (req, res, next) {
 /** Make a GET request.
  * Pass in code of company in URL
  * Returns JSON object
- *  {company: {code : apple, name : APPLE , description : "This is apple"}}
+ *  {company: {code : apple, name : APPLE , description : "This is apple", 
+ *    invoices : {id, comp_code, amt, paid, add_date, paid_date}}}
  */
 
 router.get('/:code', async function (req, res, next) {
 
-  const code = req.params.code;
+  const company_code = req.params.code;
 
   const result = await db.query(
-    `SELECT code, name, description
-      FROM companies
-      WHERE code = $1`, [code]);
+    `SELECT c.code, c.name, c.description,
+            i.id, i.amt, i.paid, i.add_date, i.paid_date
+      FROM companies AS c
+      JOIN invoices AS i ON c.code = i.comp_code
+      WHERE code = $1`, [company_code]);
 
-  const company = result.rows[0];
+  const compositeResult = result.rows[0];
 
-  if(company === undefined) {
+  if(compositeResult === undefined) {
     throw new NotFoundError();
   }
+
+  const {code, name, description} = compositeResult;
+  
+  const company = {code, name, description};
+
+  //When we get the joined table, map through rows and construct objects and append 
+  //to company.invoices
+  // company.invoices = result.rows.map(r => { 
+  //   return {
+  //   "id":r.id, 'amt':r.amt, "paid": r.paid, "add_date": r.add_date, "paid_date":r.paid_date
+  //   };
+  // });
+  
+  company.invoices = result.rows.map(r => r.id);
 
   return res.json({company});
 });

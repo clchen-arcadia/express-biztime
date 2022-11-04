@@ -31,7 +31,7 @@ router.get('/:id', async function (req, res, next) {
     `SELECT i.id, i.amt, i.paid, i.add_date, i.paid_date,
             c.code, c.name, c.description
       FROM invoices AS i
-      JOIN companies AS c on i.comp_code = c.code
+      JOIN companies AS c ON i.comp_code = c.code
       WHERE i.id = $1`, [req.params.id]);
 
   const compositeResult = result.rows[0];
