@@ -50,9 +50,9 @@ router.get('/:code', async function (req, res, next) {
   return res.json({company});
 });
 
-/** Make a POST request. Adds a company to the database 
+/** Make a POST request. Adds a company to the database
  * Input: JSON {code: apple, name: apple, description: This is apple}
- * Returns JSON obj: 
+ * Returns JSON obj:
  *  {company: {code : apple, name : APPLE , description : "This is apple"}}
 */
 
@@ -76,15 +76,15 @@ router.post('/', async function (req, res, next) {
 });
 
 
-/** Make a PUT request. Edit existing company 
+/** Make a PUT request. Edit existing company
  * Input: JSON {code : apple, name: APPLE, description: "This is apple"}
- * Returns 
+ * Returns
  *  {company : {code : apple, name : APPLE , description : "This is apple"}}
 */
 
 router.put("/:code", async function(req,res,next){
   //debugger;
-  if (req.body === undefined) throw new BadRequestError(); //TODO: specific error 
+  if (req.body === undefined) throw new BadRequestError(); //TODO: specific error
 
   const { name, description } = req.body;
   const code = req.params.code;
@@ -110,14 +110,14 @@ router.put("/:code", async function(req,res,next){
   return res.json({company});
 })
 
-/** Makes DELETE request. Deletes company and returns JSON {status:"deleted"} 
+/** Makes DELETE request. Deletes company and returns JSON {status:"deleted"}
  * If company does not exist, returns 404 error
 */
 
 router.delete("/:code", async function(req, res, next){
   debugger;
   const result = await db.query(
-    `DELETE FROM companies 
+    `DELETE FROM companies
       WHERE code = $1
       RETURNING code, name, description`, [req.params.code]
   );
@@ -126,5 +126,7 @@ router.delete("/:code", async function(req, res, next){
 
   return res.json({status:"deleted"});
 });
+
+
 
 module.exports = router;
