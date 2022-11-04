@@ -79,4 +79,54 @@ router.post('/', async function (req, res, next) {
 
 });
 
+/** Route to PUT request at invoice id 
+ * Updates an invoice. If invoice cannot be found, return 404
+ * Input: JSON {amt}
+ * Returns : {invoice: {id, comp_code, amt, paid, add_date, paid_date}}
+ */
+
+router.put('/:id', async function(req,res,next){
+  const {amt} = req.body;
+  const id = req.params.id;
+
+  if(amt === undefined) {
+    throw new BadRequestError("Invalid Input: Enter invoice amount");
+  }
+
+  const result = await db.query(
+    `UPDATE invoices
+        SET amt = $1
+        WHERE id = $2
+        RETURNING id, comp_code, amt, paid, add_date, paid_date`, [amt, id]);
+
+  const invoice = result.rows[0];
+
+  if(invoice === undefined) {
+    throw new NotFoundError();
+  }
+
+  return res.json({invoice});
+
+});
+
+/** Route to DELETE request at invoice id
+ * Deletes an invoice. If invoice cannot be found with the id, return 404
+ * Returns: JSON {status: "deleted"}
+ */
+
+router.delete('/:id', async function(req,res,next){
+  const id = req.params.id;
+
+  const result = await db.query(
+    `DELETE FROM invoices
+      WHERE id = $1
+      RETURNING id, comp_code`, [id]
+  );
+
+  if(result.rows.length === 0) throw new NotFoundError();
+
+  return res.json({status:"deleted"});
+});
+
+
 module.exports = router;
