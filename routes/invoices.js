@@ -71,7 +71,7 @@ router.post('/', async function (req, res, next) {
   }
   catch (IntegrityError) {
     console.log(IntegrityError.message);
-    throw new BadRequestError('Company code does not exist in the database'); //Error message
+    throw new BadRequestError('Company code does not exist in the database'); //TODO: Error message
   }
   const invoice = result.rows[0];
 
@@ -79,7 +79,7 @@ router.post('/', async function (req, res, next) {
 
 });
 
-/** Route to PUT request at invoice id 
+/** Route to PUT request at invoice id
  * Updates an invoice. If invoice cannot be found, return 404
  * Input: JSON {amt}
  * Returns : {invoice: {id, comp_code, amt, paid, add_date, paid_date}}
